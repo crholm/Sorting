@@ -45,13 +45,14 @@ public class SortingTest {
 	
 	
 	public static void main(String args[]){
-		int size = 100000;
+		int size = 1000000;
 		int lowerLimit = 1;
-		int upperLimit = 100000000;
+		int upperLimit = 1000000000;
 		
 		SortingTest test = new SortingTest();	
-		test.addAlgorithem(new InsertionSort());
+		//test.addAlgorithem(new InsertionSort());
 		test.addAlgorithem(new Flashsort());
+		test.addAlgorithem(new FlashsortMultiThreaded());
 		
 		
 		
