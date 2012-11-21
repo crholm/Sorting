@@ -1,7 +1,7 @@
 
 public class FlashsortMultiThreaded implements SortingAlgorithm{
 
-	private int numberOfThreads = 10;
+	private int numberOfThreads = 6;
 	private int threadsRunning = 0; 
 	private int[] subject;
 	private int result[];
@@ -30,17 +30,24 @@ public class FlashsortMultiThreaded implements SortingAlgorithm{
 			if(end >= len)
 				end = len-1;
 			
-			new Thread(new Worker(start, end)).start();
+			new Thread(new Worker(start, end, this)).start();
 			threadsRunning++;
 		}
 		
 		while(threadsRunning != 0){
 			try {
-				Thread.sleep(5);
+				synchronized (this) {
+					this.wait();
+				}
 			} catch (InterruptedException e) {	}
 		}		
 		
-		return new InsertionSort().sort(result, lowerLimit, upperLimit);
+		long time = System.currentTimeMillis();
+		result = new QuickSort().sort(result, lowerLimit, upperLimit);
+		System.out.println("QuickSort took:" + (System.currentTimeMillis() - time));
+		
+		
+		return result;
 	}
 	
 	
@@ -56,10 +63,11 @@ public class FlashsortMultiThreaded implements SortingAlgorithm{
 	private class Worker implements Runnable{
 		int start;
 		int end;
-		
-		public Worker(int start, int end){
+		FlashsortMultiThreaded parent;
+		public Worker(int start, int end, FlashsortMultiThreaded parent){
 			this.start = start;
 			this.end = end;
+			this.parent = parent;
 		}
 		
 		
@@ -71,6 +79,9 @@ public class FlashsortMultiThreaded implements SortingAlgorithm{
 				add(subject[i], result, index, len);
 			}
 			threadsRunning--;
+			synchronized (parent) {
+				parent.notifyAll();
+			}
 		}
 	
 		
