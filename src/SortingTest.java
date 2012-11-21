@@ -25,7 +25,7 @@ public class SortingTest {
 		long time = System.currentTimeMillis();
 		Arrays.sort(ref);
 		time = System.currentTimeMillis() - time;
-		System.out.println("Reference java sort: " + time);
+		System.out.println("Reference java sort: " + time + "ms");
 		
 		
 		for (SortingAlgorithm alg : algs) {
@@ -70,14 +70,15 @@ public class SortingTest {
 	public static void main(String args[]){
 		int size = 1000000;
 		int lowerLimit = 1;
-		int upperLimit = 10000000;
+		int upperLimit = 100000000;
 		
 		SortingTest test = new SortingTest();	
 		//test.addAlgorithem(new InsertionSort());
 		//test.addAlgorithem(new Flashsort());
 		//test.addAlgorithem(new FlashsortMultiThreaded());
-		test.addAlgorithem(new QuickSort());
-		test.addAlgorithem(new QuickSortThreaded());
+		//test.addAlgorithem(new QuickSort());
+		test.addAlgorithem(new QuickSortThreadedHybrid());
+		test.addAlgorithem(new RadixSort());
 		
 		
 		test.runTest(size, lowerLimit, upperLimit);

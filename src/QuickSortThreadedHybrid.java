@@ -1,13 +1,24 @@
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
-public class QuickSortThreaded implements SortingAlgorithm{
+
+public class QuickSortThreadedHybrid implements SortingAlgorithm{
 
 	private int[] numbers;
 	private int number;
-	private int numberOfThreads = 3;
-	private int threadsRunning = 0;  
+	private int numberOfThreads = 6;
+	private int threadsRunning = 0;
+	private int insertionThreshold = 75;
+	
+	private QuickSortThreadedHybrid parent;
 
+	private ThreadPoolExecutor tp = new ThreadPoolExecutor(numberOfThreads, numberOfThreads, 2, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
+	
 	public int[] sort(int[] values, int lowerLimit, int upperLimit) {
 		// Check for empty or null array
+		parent = this;
+		
 		if (values ==null || values.length==0){
 			return null;
 		}
@@ -15,13 +26,14 @@ public class QuickSortThreaded implements SortingAlgorithm{
 		number = values.length;
 		
 		threadsRunning++;
-		new Thread(new Worker(0, number - 1, this)).start();
+		tp.execute(new Worker(0, number - 1));
 	
 		while(threadsRunning != 0){
 			try {
-				synchronized (this) {
+				synchronized (parent) {
 					this.wait();
 				}
+				//Thread.sleep(10);
 			} catch (InterruptedException e) {	}
 		}		
 		
@@ -40,12 +52,12 @@ public class QuickSortThreaded implements SortingAlgorithm{
 	private class Worker implements Runnable{
 		int highRef;
 		int lowRef;
-		QuickSortThreaded parent;
+		
 
-		public Worker(int low, int high, QuickSortThreaded parent){
+		public Worker(int low, int high){
 			this.lowRef = low;
 			this.highRef = high;
-			this.parent = parent;
+			
 		}
 		@Override
 		public void run() {
@@ -57,53 +69,72 @@ public class QuickSortThreaded implements SortingAlgorithm{
 		}
 
 		private void quicksort(int low, int high) {
+			if(high-low < insertionThreshold){
+				insertionSort(low, high);
+				return;
+			}
+			
 			int i = low, j = high;
 			// Get the pivot element from the middle of the list
 			int pivot = numbers[low + (high-low)/2];
 
 			// Divide into two lists
 			while (i <= j) {
-				// If the current value from the left list is smaller then the pivot
-				// element then get the next element from the left list
+	
 				while (numbers[i] < pivot) {
 					i++;
 				}
-				// If the current value from the right list is larger then the pivot
-				// element then get the next element from the right list
+		
 				while (numbers[j] > pivot) {
 					j--;
 				}
 
-				// If we have found a values in the left list which is larger then
-				// the pivot element and if we have found a value in the right list
-				// which is smaller then the pivot element then we exchange the
-				// values.
-				// As we are done we can increase i and j
+		
 				if (i <= j) {
 					swap(i, j);
 					i++;
 					j--;
 				}
 			}
-			// Recursion
+			
+			// Recursion or Threading
 			if (low < j){
 				if(threadsRunning < numberOfThreads){
-					threadsRunning++;
-					new Thread(new Worker(low, j, parent)).start();
+					synchronized (parent) {
+						threadsRunning++;
+					}
+					tp.execute(new Worker(low, j));
 				}else{
 					quicksort(low, j);
 				}
 			}
 			if (i < high){
 				if(threadsRunning < numberOfThreads){
-					threadsRunning++;
-					new Thread(new Worker(i, high, parent)).start();
+					synchronized (parent) {
+						threadsRunning++;
+					}
+					tp.execute(new Worker(i, high));
 				}else{
 					quicksort(i, high);
 				}
 			}
+			
 		}
 
+		
+		public void insertionSort(int low, int high) {
+			 for (int i = low; i <= high; i++){
+				  int j = i;
+				  int B = numbers[i];
+				  while ((j > 0) && (numbers[j-1] > B)){
+					  numbers[j] = numbers[j-1];
+					  j--;
+				  }
+				  numbers[j] = B;
+			  }	
+		}
+		
+		
 		private void swap(int i, int j) {
 				int temp = numbers[i];
 				numbers[i] = numbers[j];

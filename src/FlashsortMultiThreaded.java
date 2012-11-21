@@ -42,9 +42,9 @@ public class FlashsortMultiThreaded implements SortingAlgorithm{
 			} catch (InterruptedException e) {	}
 		}		
 		
-		long time = System.currentTimeMillis();
-		result = new QuickSort().sort(result, lowerLimit, upperLimit);
-		System.out.println("QuickSort took:" + (System.currentTimeMillis() - time));
+		//long time = System.currentTimeMillis();
+		result = new InsertionSort().sort(result, lowerLimit, upperLimit);
+		//System.out.println("QuickSort took:" + (System.currentTimeMillis() - time));
 		
 		
 		return result;
