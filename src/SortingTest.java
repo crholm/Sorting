@@ -86,6 +86,7 @@ public class SortingTest {
 		test.addAlgorithem(new JavaStandardSort());
 //		test.addAlgorithem(new InsertionSort());
 		test.addAlgorithem(new FlashSort());
+		test.addAlgorithem(new FlashSortOriginal());
 		test.addAlgorithem(new FlashSortThreaded());
 		test.addAlgorithem(new QuickSortHybrid());
 		test.addAlgorithem(new QuickSortHybridThreaded());

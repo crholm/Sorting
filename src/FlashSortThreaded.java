@@ -218,11 +218,11 @@ public class FlashSortThreaded implements SortingAlgorithm{
 		public int[] insertionSort(int[] target, int start, int stop) {
 //			long time = System.currentTimeMillis();
 			int len;
-			if(start == 0){
+//			if(start == 0){
 				len = target.length;
-			}
-			else
-				len = stop+1;
+//			}
+//			else
+//				len = stop+1;
 
 			//target.length;
 			for (int i = start+1; i < len; i++){
