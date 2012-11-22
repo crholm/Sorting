@@ -1,10 +1,12 @@
 
-public class Flashsort implements SortingAlgorithm {
+public class FlashSort implements SortingAlgorithm {
 
+	private int scale = 2;
+	
 	@Override
 	public int[] sort(int[] subject, int lowerLimit, int upperLimit) {
 		
-		int result[] = new int[subject.length];
+		int result[] = new int[scale*subject.length];
 		
 		int len = subject.length;
 		int index;
@@ -14,14 +16,39 @@ public class Flashsort implements SortingAlgorithm {
 		
 		
 		for(int i = 0; i < len; i++){
-			index = 1+(int)(  ((len-1)*((double)subject[i]-a_min)) / (a_range)  );
+			index = 1+(int)(  scale*((len-1)*((double)subject[i]-a_min)) / (a_range)  );
 			
 			add(subject[i], result, index, len);
 		}
 		
 		
 		
-		return new InsertionSort().sort(result, lowerLimit, upperLimit);
+		return insertionSort(subject, result);
+	}
+	
+	
+	public int[] insertionSort(int[] target, int[] values) {
+		int pointer = 0;
+		for(int i = 0; i< values.length; i++){
+			if(values[i] != 0){
+				target[pointer] = values[i];
+				pointer++;
+			}
+		}
+		
+		int len = target.length;
+		for (int i = 1; i < len; i++){
+			  int j = i;
+			  int B = target[i];
+			  while ((j > 0) && (target[j-1] > B)){
+				  target[j] = target[j-1];
+				  j--;
+			  }
+			  target[j] = B;
+		  }
+		  
+		
+		return target;
 	}
 	
 	
@@ -69,7 +96,7 @@ public class Flashsort implements SortingAlgorithm {
 
 	@Override
 	public String getName() {
-		return "Flash Sort";
+		return "FlashSort";
 	}
 
 }

@@ -3,7 +3,8 @@ import java.util.LinkedList;
 
 
 public class SortingTest {
-
+	private int[] sortedArray[];
+	
 	LinkedList<SortingAlgorithm> algs = new LinkedList<SortingAlgorithm>();
 	int ref[];
 	
@@ -11,6 +12,7 @@ public class SortingTest {
 		algs.add(alg);
 	}
 	
+
 	public void runTest(int arraySize, int lowerLimit, int upperLimit){
 		int array[] = new int[arraySize];
 		
@@ -20,24 +22,27 @@ public class SortingTest {
 		
 		
 		
-		ref = new int[arraySize];
-		System.arraycopy(array, 0, ref, 0, arraySize);
-		long time = System.currentTimeMillis();
-		Arrays.sort(ref);
-		time = System.currentTimeMillis() - time;
-		System.out.println("Reference java sort: " + time + "ms");
+		
+		
+		System.out.println(arraySize + " random elements to sort.");
+		
 		
 		
 		for (SortingAlgorithm alg : algs) {
 			int subject[] = new int[arraySize];
 			System.arraycopy(array, 0, subject, 0, arraySize);
 			
-			time = System.currentTimeMillis();
+			long time = System.currentTimeMillis();
 			subject = alg.sort(subject, lowerLimit, upperLimit);
 			time = System.currentTimeMillis() - time;
 			
-			String sorted = isSorted(subject) ? "is sorted" : "is NOT sorted, diff " + diff;
-			System.out.println(alg.getName() + " took " + time + "ms and " + sorted );			
+			String sorted = isSorted(subject) ? "\tOK" : "\tNOT sorted, diff: " + diff;
+			System.out.print(alg.getName() + ":");
+			int preTabs = (alg.getName().length()+1)/8;
+			for(int i = 0; i< 4-preTabs; i++){
+				System.out.print("\t");
+			}
+			System.out.println(time + "ms" + sorted);
 		}
 		
 		
@@ -60,6 +65,10 @@ public class SortingTest {
 	double diff;
 	private void calcDiff(int[] array) {
 		int count = 0;
+		ref = new int[array.length];
+		System.arraycopy(array, 0, ref, 0, array.length);
+		Arrays.sort(ref);
+		
 		for(int i = 0; i< array.length; i++){
 			if(array[i] != ref[i])
 				count++;
@@ -68,20 +77,23 @@ public class SortingTest {
 	}
 
 	public static void main(String args[]){
-		int size = 1000000;
+		int size = 10000000;
 		int lowerLimit = 1;
-		int upperLimit = 100000000;
+		int upperLimit = 2000000000;
 		
 		SortingTest test = new SortingTest();	
-		//test.addAlgorithem(new InsertionSort());
-		//test.addAlgorithem(new Flashsort());
-		//test.addAlgorithem(new FlashsortMultiThreaded());
-		//test.addAlgorithem(new QuickSort());
-		test.addAlgorithem(new QuickSortThreadedHybrid());
+		
+		test.addAlgorithem(new JavaStandardSort());
+//		test.addAlgorithem(new InsertionSort());
+		test.addAlgorithem(new FlashSort());
+		test.addAlgorithem(new FlashSortThreaded());
+		test.addAlgorithem(new QuickSortHybrid());
+		test.addAlgorithem(new QuickSortHybridThreaded());
 		test.addAlgorithem(new RadixSort());
 		
 		
 		test.runTest(size, lowerLimit, upperLimit);
+		System.exit(0);
 	}
 	 
 }

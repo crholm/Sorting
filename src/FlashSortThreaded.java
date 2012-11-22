@@ -1,5 +1,5 @@
 
-public class FlashsortMultiThreaded implements SortingAlgorithm{
+public class FlashSortThreaded implements SortingAlgorithm{
 
 	private int numberOfThreads = 6;
 	private int threadsRunning = 0; 
@@ -8,11 +8,11 @@ public class FlashsortMultiThreaded implements SortingAlgorithm{
 	private int len;
 	private double a_min;
 	private double a_range;
-	
+	private int scale = 2;
 	@Override
 	public int[] sort(int[] subject, int lowerLimit, int upperLimit) {
 		this.subject = subject;
-		result = new int[subject.length];
+		result = new int[scale*subject.length];
 		
 		
 		
@@ -42,29 +42,53 @@ public class FlashsortMultiThreaded implements SortingAlgorithm{
 			} catch (InterruptedException e) {	}
 		}		
 		
+		
 		//long time = System.currentTimeMillis();
-		result = new InsertionSort().sort(result, lowerLimit, upperLimit);
-		//System.out.println("QuickSort took:" + (System.currentTimeMillis() - time));
+		subject = insertionSort(subject, result);
+		//System.out.println("InsertionSort took:" + (System.currentTimeMillis() - time));
 		
 		
-		return result;
+		return subject;
 	}
 	
 	
+	public int[] insertionSort(int[] target, int[] values) {
+		int pointer = 0;
+		for(int i = 0; i< values.length; i++){
+			if(values[i] != 0){
+				target[pointer] = values[i];
+				pointer++;
+			}
+		}
+	
+		int len = target.length;
+		for (int i = 1; i < len; i++){
+			  int j = i;
+			  int B = target[i];
+			  while ((j > 0) && (target[j-1] > B)){
+				  target[j] = target[j-1];
+				  j--;
+			  }
+			  target[j] = B;
+		  }
+		  
+		
+		return target;
+	}
 	
 	
 
 	@Override
 	public String getName() {
-		return "Flash Sort Multithreaded";
+		return "FlashSortThreaded";
 	}
 
 	
 	private class Worker implements Runnable{
 		int start;
 		int end;
-		FlashsortMultiThreaded parent;
-		public Worker(int start, int end, FlashsortMultiThreaded parent){
+		FlashSortThreaded parent;
+		public Worker(int start, int end, FlashSortThreaded parent){
 			this.start = start;
 			this.end = end;
 			this.parent = parent;
@@ -75,7 +99,7 @@ public class FlashsortMultiThreaded implements SortingAlgorithm{
 		public void run() {
 			int index;
 			for(int i = start; i < end; i++){
-				index = 1+(int)(  ((len-1)*((double)subject[i]-a_min)) / (a_range) );
+				index = 1+(int)(  scale*((len-1)*((double)subject[i]-a_min)) / (a_range) );
 				add(subject[i], result, index, len);
 			}
 			threadsRunning--;

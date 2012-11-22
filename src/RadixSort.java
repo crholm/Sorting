@@ -17,7 +17,7 @@ import java.util.Queue;
  */
 public class RadixSort implements SortingAlgorithm {
     
-    private static final int numberOfBuckets = 1000;
+    private static final int numberOfBuckets = 10000;
     
     @SuppressWarnings("unchecked")
     private static final Queue<Integer>[] buckets = new ArrayDeque[numberOfBuckets];
@@ -81,6 +81,6 @@ public class RadixSort implements SortingAlgorithm {
 
 	@Override
 	public String getName() {
-		return "Radix sort";
+		return "RadixSort";
 	}
 }

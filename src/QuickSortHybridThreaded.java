@@ -3,15 +3,15 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 
-public class QuickSortThreadedHybrid implements SortingAlgorithm{
+public class QuickSortHybridThreaded implements SortingAlgorithm{
 
 	private int[] numbers;
 	private int number;
 	private int numberOfThreads = 6;
 	private int threadsRunning = 0;
-	private int insertionThreshold = 75;
+	private int insertionThreshold = 100;
 	
-	private QuickSortThreadedHybrid parent;
+	private QuickSortHybridThreaded parent;
 
 	private ThreadPoolExecutor tp = new ThreadPoolExecutor(numberOfThreads, numberOfThreads, 2, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());
 	
@@ -33,7 +33,7 @@ public class QuickSortThreadedHybrid implements SortingAlgorithm{
 				synchronized (parent) {
 					this.wait();
 				}
-				//Thread.sleep(10);
+		
 			} catch (InterruptedException e) {	}
 		}		
 		
@@ -45,7 +45,7 @@ public class QuickSortThreadedHybrid implements SortingAlgorithm{
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
-		return "Quick Sort Threaded";
+		return "QuickSortHybridThreaded";
 	}
 
 
@@ -75,9 +75,18 @@ public class QuickSortThreadedHybrid implements SortingAlgorithm{
 			}
 			
 			int i = low, j = high;
-			// Get the pivot element from the middle of the list
+			
+			// Get a good pivot element
 			int pivot = numbers[low + (high-low)/2];
-
+			int left = numbers[low];
+			int right = numbers[high];
+			
+			if(pivot < left && left < right || right < left && left < pivot )
+				pivot = left;
+			else if(pivot < right && right < left || left < right && right < pivot )
+				pivot = right;
+			
+			
 			// Divide into two lists
 			while (i <= j) {
 	
@@ -97,7 +106,7 @@ public class QuickSortThreadedHybrid implements SortingAlgorithm{
 				}
 			}
 			
-			// Recursion or Threading
+			// Recursion or Threading of Quicksort
 			if (low < j){
 				if(threadsRunning < numberOfThreads){
 					synchronized (parent) {
@@ -120,7 +129,6 @@ public class QuickSortThreadedHybrid implements SortingAlgorithm{
 			}
 			
 		}
-
 		
 		public void insertionSort(int low, int high) {
 			 for (int i = low; i <= high; i++){
@@ -140,7 +148,6 @@ public class QuickSortThreadedHybrid implements SortingAlgorithm{
 				numbers[i] = numbers[j];
 				numbers[j] = temp;		
 		}
-
 
 	}
 
