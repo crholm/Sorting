@@ -22,12 +22,12 @@ public class FlashSort implements SortingAlgorithm {
 		}
 		
 		
-		
-		return insertionSort(subject, result);
+		mergin(subject, result);
+		insertionSort(subject);
+				
+		return subject;
 	}
-	
-	
-	public int[] insertionSort(int[] target, int[] values) {
+	public void mergin(int[] target, int[] values){
 		int pointer = 0;
 		for(int i = 0; i< values.length; i++){
 			if(values[i] != 0){
@@ -35,7 +35,10 @@ public class FlashSort implements SortingAlgorithm {
 				pointer++;
 			}
 		}
-		
+	}
+	
+	public int[] insertionSort(int[] target) {
+
 		int len = target.length;
 		for (int i = 1; i < len; i++){
 			  int j = i;

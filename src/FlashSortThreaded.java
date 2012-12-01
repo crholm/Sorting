@@ -66,6 +66,7 @@ public class FlashSortThreaded implements SortingAlgorithm{
 //			} catch (InterruptedException e) {	}
 //		}	
 		
+//		long time = System.currentTimeMillis();
 		merging(subject, result);
 //		System.out.println("Mergin in Flashsort took:" + (System.currentTimeMillis() - time));
 		
@@ -73,9 +74,9 @@ public class FlashSortThreaded implements SortingAlgorithm{
 		isMerged = true;		
 		synchronized (this) {
 			this.notifyAll();
-			threadsRunning = numberOfThreads-1;
+			threadsRunning = numberOfThreads;
 		}
-		
+		//long time = System.currentTimeMillis();
 		while(threadsRunning != 0){
 			try {
 				synchronized (this) {
@@ -83,6 +84,7 @@ public class FlashSortThreaded implements SortingAlgorithm{
 				}
 			} catch (InterruptedException e) {	}
 		}	
+		//System.out.println("Insertion in Flashsort took:" + (System.currentTimeMillis() - time));
 		
 //		long time = System.currentTimeMillis();
 //		subject = insertionSort(subject, result);
@@ -205,7 +207,7 @@ public class FlashSortThreaded implements SortingAlgorithm{
 					}
 				} catch (InterruptedException e) {	}
 			}
-			insertionSort(subject, start, end);
+			insertionSort(subject, start);
 			
 			synchronized (parent) {
 				threadsRunning--;
@@ -215,16 +217,9 @@ public class FlashSortThreaded implements SortingAlgorithm{
 		}
 	
 		
-		public int[] insertionSort(int[] target, int start, int stop) {
-//			long time = System.currentTimeMillis();
-			int len;
-//			if(start == 0){
-				len = target.length;
-//			}
-//			else
-//				len = stop+1;
+		public int[] insertionSort(int[] target, int start) {
+			int len = target.length;
 
-			//target.length;
 			for (int i = start+1; i < len; i++){
 				  int j = i;
 				  int B = target[i];
@@ -233,9 +228,7 @@ public class FlashSortThreaded implements SortingAlgorithm{
 					  j--;
 				  }
 				  target[j] = B;
-			  }
-//			System.out.println("Insertion in Flashsort took:" + (System.currentTimeMillis() - time));
-			
+			  }			
 			return target;
 		}
 		

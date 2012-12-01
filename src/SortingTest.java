@@ -79,18 +79,19 @@ public class SortingTest {
 	public static void main(String args[]){
 		int size = 10000000;
 		int lowerLimit = 1;
-		int upperLimit = 2000000000;
+		int upperLimit = 10000000;
 		
 		SortingTest test = new SortingTest();	
 		
-		test.addAlgorithem(new JavaStandardSort());
+//		test.addAlgorithem(new JavaStandardSort());
 //		test.addAlgorithem(new InsertionSort());
 		test.addAlgorithem(new FlashSort());
-		test.addAlgorithem(new FlashSortOriginal());
+//		test.addAlgorithem(new FlashSortOriginal());
 		test.addAlgorithem(new FlashSortThreaded());
-		test.addAlgorithem(new QuickSortHybrid());
-		test.addAlgorithem(new QuickSortHybridThreaded());
-		test.addAlgorithem(new RadixSort());
+		test.addAlgorithem(new FlashSortSampled());
+//		test.addAlgorithem(new QuickSortHybrid());
+//		test.addAlgorithem(new QuickSortHybridThreaded());
+//		test.addAlgorithem(new RadixSort());
 		
 		
 		test.runTest(size, lowerLimit, upperLimit);
