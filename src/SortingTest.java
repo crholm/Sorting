@@ -83,13 +83,13 @@ public class SortingTest {
 		
 		SortingTest test = new SortingTest();	
 		
-//		test.addAlgorithem(new JavaStandardSort());
+		test.addAlgorithem(new JavaStandardSort());
 //		test.addAlgorithem(new InsertionSort());
 		test.addAlgorithem(new FlashSort());
 //		test.addAlgorithem(new FlashSortOriginal());
-		test.addAlgorithem(new FlashSortThreaded());
-		test.addAlgorithem(new FlashSortSampled());
-//		test.addAlgorithem(new QuickSortHybrid());
+//		test.addAlgorithem(new FlashSortThreaded());
+//		test.addAlgorithem(new FlashSortSampled());
+		test.addAlgorithem(new QuickSortHybrid());
 //		test.addAlgorithem(new QuickSortHybridThreaded());
 //		test.addAlgorithem(new RadixSort());
 		

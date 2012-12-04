@@ -12,7 +12,7 @@ public class JavaStandardSort implements SortingAlgorithm {
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
-		return "JavaStandardSort";
+		return "JavaTimsort";
 	}
 
 }
